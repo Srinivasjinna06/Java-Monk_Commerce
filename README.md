@@ -1,10 +1,10 @@
-# Monk Commerce 2025 - Coupons Management API
+# Monk Commerce - Coupons Management API
 
-This project implements a RESTful API for managing and applying different types of discount coupons (cart-wise, product-wise, and BxGy) for an e-commerce platform, as part of the Software Developer (Backend) Task for Monk Commerce 2025. The design is extensible to support future coupon types using an abstract `Coupon` class with single-table inheritance.
+This project implements a RESTful API for managing and applying different types of discount coupons (cart-wise, product-wise, and BxGy) for an e-commerce platform. The design is extensible to support future coupon types using an abstract `Coupon` class with single-table inheritance.
 
 ## Setup Instructions
 
-1. Clone the repository: `git clone <repository-url>`
+1. Clone the repository: `git clone https://github.com/Srinivasjinna06/Java-Monk_Commerce.git` 
 2. Navigate to the project directory: `cd demo`
 3. Build and run the application using Maven:
    - `mvn clean install`
@@ -35,7 +35,9 @@ This project implements a RESTful API for managing and applying different types 
   "expirationDate": "2025-09-29T12:00:00",
   "threshold": 100,
   "discountPercentage": 10
-  } -**Exceptions/Errors**:
+  } 
+  ```
+  - **Exceptions/Errors**:
   1.400 Bad Request: Invalid coupon_type or missing fields (e.g., "Type definition error").
   2.500 Internal Server Error: Database save failure (rare, log for details).
 
@@ -61,9 +63,9 @@ This project implements a RESTful API for managing and applying different types 
     "discountPercentage": 20
   }
 ]
-
+````
 - **Response (200 OK)**:
-```json
+````json
 [
   {
     "id": 1,
@@ -80,14 +82,15 @@ This project implements a RESTful API for managing and applying different types 
     "discountPercentage": 20
   }
 ]
-- **Exceptions/Errors**:
+````
+-**Exceptions/Errors**:
 400 Bad Request: Empty or null list ("Coupon list cannot be empty").
 400 Bad Request: Invalid coupon data in the list.
 
 
 
 ### 3. GET /coupons
--**Purpose: Retrieve all coupons.**
+Purpose: Retrieve all coupons.
 Request: No body.
 Response (200 OK):
 ```json
@@ -100,50 +103,71 @@ Response (200 OK):
     "discountPercentage": 10
   }
 ]
+```
 Response (200 OK, if empty): []
 Exceptions/Errors: None (empty list is valid).
 
+### 4. GET /coupons/{id}
+Purpose: Retrieve specified coupon deatils.
+Request: No body.
+Response (200 OK):
+```json
+{
+  "coupon_type": "CART_WISE",
+  "id": 3,
+  "name": "15PercentOff",
+  "expirationDate": "2025-10-29T12:00:00",
+  "threshold": 150.0,
+  "discountPercentage": 15.0
+}
+```
 
-### 4. PUT /coupons/{id}
--**Purpose: Update an existing coupon.**
+Exceptions/Errors:
+400 Not Found: "Coupon not found" if ID doesn’t exist.
+
+
+### 5. PUT /coupons/{id}
+Purpose: Update an existing coupon.
 Request Body (e.g., update coupon ID 1):
-json{
+```json
+{
   "coupon_type": "CART_WISE",
   "name": "15PercentOff",
   "expirationDate": "2025-10-29T12:00:00",
   "threshold": 150,
   "discountPercentage": 15
 }
-
-Response (200 OK):
-json{
+```
+- **Response (200 OK)**:
+```json
+{
   "id": 1,
   "name": "15PercentOff",
   "expirationDate": "2025-10-29T12:00:00",
   "threshold": 150,
   "discountPercentage": 15
 }
-
-Exceptions/Errors:
+```
+- **Exceptions/Errors**:
 404 Not Found: "Coupon not found with id: {id}" if ID doesn’t exist.
 400 Bad Request: "Coupon type cannot be changed" if coupon_type mismatches.
 400 Bad Request: Invalid input (e.g., negative threshold, add @Positive for validation).
 
 
-5. DELETE /coupons/{id}
+### 6. DELETE /coupons/{id}
 
 Purpose: Delete a coupon by ID.
 Request: No body.
 Response (204 No Content): No content (success).
-Exceptions/Errors:
-
+-**Exceptions/Errors**:
 404 Not Found: "Coupon not found with id: {id}" if ID doesn’t exist (current implementation no-op; enhance for 404).
 
 
-### 6. POST /applicable-coupons
+### 7. POST /applicable-coupons
 Purpose: Fetch all applicable coupons for a cart.
 Request Body:
-json{
+```json
+{
   "items": [
     {
       "productId": 1,
@@ -157,25 +181,29 @@ json{
     }
   ]
 }
+```
 
-Response (200 OK, with BxGyCoupon):
-json[
+- **Response (200 OK, with BxGyCoupon)**:
+```json
+[
   {
     "couponId": 1,
     "type": "bxgy",
     "discount": 50.0
   }
 ]
-Response (200 OK, if none applicable): []
-Exceptions/Errors:
+```
+- **Response (200 OK, if none applicable)**: []
+- **Exceptions/Errors**:
 400 Bad Request: "Cart or items cannot be null" if body is invalid.
 
 
-### 7. POST /apply-coupon/{id}
+### 8. POST /apply-coupon/{id}
 
 Purpose: Apply a specific coupon to a cart.
 Request Body (e.g., for coupon ID 1):
-json{
+```json
+{
   "items": [
     {
       "productId": 1,
@@ -189,9 +217,11 @@ json{
     }
   ]
 }
+```
 
-Response (200 OK, for BxGyCoupon):
-json{
+- **Response (200 OK, for BxGyCoupon)**:
+````json
+{
   "items": [
     {
       "productId": 1,
@@ -210,13 +240,10 @@ json{
   "totalDiscount": 50.0,
   "finalPrice": 180.0
 }
-
-Exceptions/Errors:
-
+````
+- **Exceptions/Errors**:
 404 Not Found: "Coupon not found with id: {id}".
 400 Bad Request: "Coupon not applicable to this cart" if conditions aren’t met.
-
-
 
 
 ### Implemented Use Cases:
@@ -285,4 +312,5 @@ Exceptions/Errors:
 - Implement pagination for GET /coupons (e.g., ?page=0&size=10).
 - Enhance error handling with specific exception types (e.g., CouponValidationException).
 - Deploy with Docker for consistency.
+
 ````
