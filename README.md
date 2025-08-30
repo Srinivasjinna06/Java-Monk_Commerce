@@ -4,7 +4,7 @@ This project implements a RESTful API for managing and applying different types 
 
 ## Setup Instructions
 
-1. Clone the repository: `git clone https://github.com/Srinivasjinna06/Java-Monk_Commerce.git` 
+1. Clone the repository: `git clone https://github.com/Srinivasjinna06/Monk_Commerce.git` 
 2. Navigate to the project directory: `cd demo`
 3. Build and run the application using Maven:
    - `mvn clean install`
