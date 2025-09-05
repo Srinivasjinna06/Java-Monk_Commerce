@@ -225,7 +225,7 @@ Request Body (e.g., for coupon ID 1):
   "items": [
     {
       "productId": 1,
-      "quantity": 5,
+      "quantity": 4,
       "price": 50,
       "totalDiscount": 50.0
     },
